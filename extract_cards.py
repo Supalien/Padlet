@@ -1,17 +1,32 @@
 import pandas as pd
 from pandas.compat import StringIO
+import re
 
 
 class Padlet:
     def __init__(self, data, splitter="~"):
-        self.names, self.answers, self.questions = data.split(splitter)
-        self.names, self.answers, self.questions = (pd.read_csv(StringIO(col)) for col in self.replacer())
+        self.names, self.answers, self.questions = [pd.read_csv(StringIO(col)) for col in data.split(splitter)]
+        self.names = [Card(self.names["Subject"][i], self.names["Body"][i]) for i in range(len(self.names))]
+        self.answers = [Card(self.answers["Subject"][i], self.answers["Body"][i]) for i in range(len(self.answers))]
+        self.questions = [Card(self.questions["Subject"][i], self.questions["Body"][i]) for i in range(len(self.questions))]
 
-    def replacer(self):
-        names = self.names.replace("שם המשחק\n", "", 1)
-        answers = self.answers.replace("קלפי תשובות\n", "", 1)
-        questions = self.questions.replace("קלפי שאלות\n", "", 1)
-        return (names, answers, questions)
+
+class Card:
+    def __init__(self, author, content):
+        self.content = content.replace("<div>", "").replace("</div>", "")\
+            .strip()
+        self.author = self.userlize(author)
+
+    def __repr__(self):
+        return f"{self.author}: {self.content}"
+
+    def userlize(self, user):
+        if user == "עלום שם": return user
+        try:
+            user = re.search(r"[uU][\\\/](.+)$", user).group(1)
+        except:
+            print(user)
+        return f"/u/{user}"
 
 
 def load(path, splitter="~"):
