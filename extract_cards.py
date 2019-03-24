@@ -10,6 +10,12 @@ class Padlet:
         self.answers = [Card(self.answers["Subject"][i], self.answers["Body"][i]) for i in range(len(self.answers))]
         self.questions = [Card(self.questions["Subject"][i], self.questions["Body"][i]) for i in range(len(self.questions))]
 
+    def status(self):
+        msg = (
+        f"Names: {len(self.names)} Cards.\n"
+        f"Answers: {len(self.answers)} Cards.\n"
+        f"Questions: {len(self.questions)} Cards.")
+        return msg
 
 class Card:
     def __init__(self, author, content):
