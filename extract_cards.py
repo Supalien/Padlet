@@ -20,7 +20,7 @@ class Padlet:
 class Card:
     def __init__(self, author, content):
         self.content = content.replace("<div>", "").replace("</div>", "")\
-            .strip()
+            .strip()[::-1]
         self.author = self.userlize(author)
 
     def __repr__(self):
