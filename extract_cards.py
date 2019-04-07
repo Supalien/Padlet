@@ -20,11 +20,11 @@ class Padlet:
 class Card:
     def __init__(self, author, content):
         self.content = content.replace("<div>", "").replace("</div>", "")\
-            .strip()[::-1]
+            .strip()
         self.author = self.userlize(author)
 
     def __repr__(self):
-        return f"{self.author}: {self.content}"
+        return f"{self.author}: {self.content[::-1]}"
 
     def userlize(self, user):
         if user == "עלום שם": return user
